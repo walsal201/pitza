@@ -1,0 +1,87 @@
+import json
+
+def display_menu(pizza_place, menu):
+    print(f"Welcome to {pizza_place}!")
+    print("Please choose a pizza from the following options:")
+    for idx, (name, price) in enumerate(menu['pizzas'].items(), start=1):
+        print(f"{idx}. {name} - {price} SAR")
+
+def choose_pizza(menu):
+    pizza_choices = {str(idx): name for idx, (name, price) in enumerate(menu['pizzas'].items(), start=1)}
+    choice = input("Enter the number of your choice: ")
+    return pizza_choices.get(choice, "Invalid choice")
+
+def choose_size():
+    print("\nPlease choose a size:")
+    print("1. Small")
+    print("2. Medium")
+    print("3. Large")
+    size_choices = {
+        "1": "Small",
+        "2": "Medium",
+        "3": "Large"
+    }
+    choice = input("Enter the number of your choice: ")
+    return size_choices.get(choice, "Invalid choice")
+
+def choose_toppings(menu):
+    print("\nPlease choose additional toppings (comma-separated, e.g., 1,2):")
+    for idx, (name, price) in enumerate(menu['toppings'].items(), start=1):
+        print(f"{idx}. {name} - {price} SAR")
+    topping_choices = {str(idx): name for idx, (name, price) in enumerate(menu['toppings'].items(), start=1)}
+    choices = input("Enter the numbers of your choices: ").split(',')
+    selected_toppings = [topping_choices.get(choice.strip(), "Invalid choice") for choice in choices]
+    return selected_toppings
+
+def main():
+    # Menu for Caesar's Pizza in Riyadh
+    menu = {
+        "pizzas": {
+            "Margherita": 25,
+            "Pepperoni": 30,
+            "Vegetarian": 28,
+            "BBQ Chicken": 35
+        },
+        "toppings": {
+            "Extra Cheese": 5,
+            "Mushrooms": 4,
+            "Onions": 3,
+            "Sausage": 6,
+            "Bacon": 7,
+            "Black Olives": 4,
+            "Green Peppers": 3,
+            "Pineapple": 5,
+            "Spinach": 4
+        }
+    }
+
+    pizza_place = "Caesar's Pizza"
+    
+    display_menu(pizza_place, menu)
+
+    pizza_type = choose_pizza(menu)
+    if pizza_type == "Invalid choice":
+        print("Invalid pizza choice. Exiting.")
+        return
+
+    pizza_size = choose_size()
+    if pizza_size == "Invalid choice":
+        print("Invalid size choice. Exiting.")
+        return
+
+    toppings = choose_toppings(menu)
+    if "Invalid choice" in toppings:
+        print("Invalid toppings choice. Exiting.")
+        return
+
+    total_price = menu['pizzas'][pizza_type] + sum(menu['toppings'][topping] for topping in toppings if topping != "Invalid choice")
+
+    print("\nOrder Summary:")
+    print(f"Pizza: {pizza_type}")
+    print(f"Size: {pizza_size}")
+    print(f"Toppings: {', '.join(toppings if toppings else ['No additional toppings'])}")
+    print(f"Total Price: {total_price} SAR")
+    print("\nThank you for your order!")
+
+if __name__ == "__main__":
+    main()
